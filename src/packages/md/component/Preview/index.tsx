@@ -13,14 +13,14 @@ const converter = new Showdown.Converter({
 });
 
 export default function Preview() {
-  const value = useContext(context);
+  const store = useContext(context);
   const previewRef = createRef<HTMLElement>();
 
   useEffect(() => {
     if (previewRef.current) {
-      previewRef.current.innerHTML = converter.makeHtml(value);
+      previewRef.current.innerHTML = converter.makeHtml(store.value);
     }
-  }, [value]);
+  }, [store.value]);
 
   return <div className="markdown-body" ref={previewRef as any} />;
 }
