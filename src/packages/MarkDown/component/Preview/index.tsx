@@ -1,9 +1,9 @@
-import context from '../../context';
-import { createRef, useContext } from 'react';
-import * as Showdown from 'showdown';
-import { useEffect } from 'react';
-import './index.less';
-import './markdown.less';
+import context from "../../context";
+import { createRef, useContext } from "react";
+import * as Showdown from "showdown";
+import React, { useEffect } from "react";
+import "./index.less";
+import "./markdown.less";
 
 const converter = new Showdown.Converter({
   tables: true,
@@ -12,7 +12,7 @@ const converter = new Showdown.Converter({
   tasklists: true,
 });
 
-export default function Preview() {
+export default function Preview(props: any) {
   const store = useContext(context);
   const previewRef = createRef<HTMLElement>();
 
@@ -22,5 +22,5 @@ export default function Preview() {
     }
   }, [store.value]);
 
-  return <div className="markdown-body" ref={previewRef as any} />;
+  return <div className="markdown-body" ref={previewRef as any} {...props} />;
 }

@@ -1,5 +1,10 @@
 # dependencies
-/node_modules
+**/node_modules
+# roadhog-api-doc ignore
 
 # production
 /dist
+
+# misc
+yarn-error.log
+yarn.lock

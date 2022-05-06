@@ -1,11 +1,11 @@
 import { createElement } from 'react';
 import type { ContextStore } from '../../../context';
-import type { SetStoreType } from '../../../types';
+import type { SetStateType } from '../../../types';
 import * as toolElementMap from './constants';
 
-export function createToolsElement(store: ContextStore, setStore: SetStoreType) {
+export function createToolsElement(ctxValue: ContextStore, setCtxValue: SetStateType) {
   return Object.values(toolElementMap).map((tool) => {
-    const props = createProps(tool, store, setStore);
+    const props = createProps(tool, ctxValue, setCtxValue);
     return createElement(tool, props);
   });
 }
@@ -62,14 +62,14 @@ function handlerSelectValue(store: ContextStore, handler: (value: string) => str
   let result = value;
 
   if (start !== end) {
-    result = value.slice(0, start) + handler(value.slice(start, end));
+    result = value.slice(0, start) + handler(value.slice(start, end)) + value.slice(end + 1);
   }
 
   return result;
 }
 
-function createProps(tool: any, store: ContextStore, setStore: SetStoreType) {
-  const [start, end] = store.caretPos;
+function createProps(tool: any, ctxValue: ContextStore, setCtxValue: SetStateType) {
+  const [start, end] = ctxValue.caretPos;
   let value = '';
   let onToolClick = () => {};
 
@@ -79,9 +79,9 @@ function createProps(tool: any, store: ContextStore, setStore: SetStoreType) {
         console.log('start,', start, end);
 
         if (start !== end) {
-          value = handlerSelectValue(store, func);
+          value = handlerSelectValue(ctxValue, func);
         } else {
-          value = handlerStoreValue(store, func);
+          value = handlerStoreValue(ctxValue, func);
         }
       };
     }
@@ -91,8 +91,8 @@ function createProps(tool: any, store: ContextStore, setStore: SetStoreType) {
     key: tool.render.displayName,
     onClick() {
       onToolClick();
-      setStore((oldStore) => ({
-        ...oldStore,
+      setCtxValue((oldValue) => ({
+        ...oldValue,
         value,
       }));
     },

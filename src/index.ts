@@ -1,3 +1,3 @@
-import Markdown from "./components/Markdown";
+import MarkDown from "@/packages/MarkDown";
 
-export default Markdown;
+export default MarkDown;

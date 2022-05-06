@@ -1,17 +1,21 @@
-import { Input } from 'antd';
-import { useContext, useEffect, useRef } from 'react';
-import context from '../../context';
-import styles from './index.less';
-import type { SetStoreType } from '../../types';
-import useCursort from '../../hooks/useCursort';
+import { useContext, useEffect, useRef } from "react";
+import context from "../../context";
+import "./index.less";
+import type { SetStateType } from "../../types";
+import useCursort from "../../hooks/useCursort";
+import React from "react";
 
-export default function Textarea({ setStore }: { setStore: SetStoreType }) {
+interface PropsType extends Indexable {
+  setCtxValue: SetStateType;
+}
+
+export default function Textarea({ setCtxValue, ...props }: PropsType) {
   const store = useContext(context);
   const textAreaDom = useRef<Element | null>(null);
   const { getCursortPosition } = useCursort();
 
   useEffect(() => {
-    const dom = document.querySelector(`.${styles.mdTextarea}`);
+    const dom = document.querySelector(`.mdTextarea`);
     textAreaDom.current = dom;
   }, []);
 
@@ -19,24 +23,24 @@ export default function Textarea({ setStore }: { setStore: SetStoreType }) {
     if (textAreaDom.current) {
       const [start, end] = getCursortPosition(textAreaDom.current);
 
-      setStore((oldStore) => ({
-        ...oldStore,
+      setCtxValue((oldValue) => ({
+        ...oldValue,
         caretPos: [start, end],
       }));
     }
   }
 
   function onChange(e: any) {
-    setStore((_store) => ({
+    setCtxValue((_store) => ({
       ..._store,
       value: e.target.value,
     }));
   }
 
   return (
-    <div className={styles.mdTextareaContainer}>
-      <Input.TextArea
-        className={styles.mdTextarea}
+    <div className="mdTextareaContainer" {...props}>
+      <textarea
+        className="mdTextarea"
         value={store.value}
         onChange={onChange}
         onMouseUp={onSetCaretPos}
